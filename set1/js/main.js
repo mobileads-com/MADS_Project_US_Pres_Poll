@@ -135,12 +135,12 @@ mads.prototype.tracker = function(tt, type, name, value) {
             src = src.replace('{{rmavalue}}', value);
 
             /* Insert TT's macro */
-            if (this.trackedEngagementType.indexOf(tt) != '-1' || this.engagementTypeExlude.indexOf(tt) != '-1') {
-                src = src.replace('tt={{rmatt}}', '');
-            } else {
+            // if (this.trackedEngagementType.indexOf(tt) != '-1' || this.engagementTypeExlude.indexOf(tt) != '-1') {
+            //     src = src.replace('tt={{rmatt}}', '');
+            // } else {
                 src = src.replace('{{rmatt}}', tt);
                 this.trackedEngagementType.push(tt);
-            }
+            // }
 
             /* Append ty for first tracker only */
             if (!this.firstEngagementTracked && tt == 'E') {
@@ -182,6 +182,7 @@ mads.prototype.loadCss = function(href) {
 }
 
 var renderAd = function() {
+  var sent = false;
     var app = new mads();
 
     var qa = [{
@@ -190,20 +191,20 @@ var renderAd = function() {
         'T': 'upcomingprimary_ver1'
     }, {
         'Q': 'Who is your first choice for President?',
-        'A': ['Trump', 'Cruz', 'Kasich', 'Undecided'],
+        'A': ['Cruz', 'Kasich', 'Trump', 'Undecided'],
         'T': 'firstchoice_ver1'
     }, {
         'Q': 'Who is your 2nd choice?',
-        'A': ['Trump', 'Cruz', 'Kasich', 'Undecided'],
+        'A': ['Cruz', 'Kasich', 'Trump', 'Undecided'],
         'T': 'secondchoice_ver1'
     }, {
         'Q': 'What are your key issues?',
-        'A': ['National Security and Fighting islamic Terrorism', 'Guns and Second Amendment Rights', 'Border Security and No Amnesty', 'Reducing Government Spending', 'Prolife and Abortion Issues', 'Repeating Obamacare'],
+        'A': ['National Security and Fighting Islamic Terrorism', 'Peace Through Strength Foreign Policy', 'Reducing Government Spending', 'Economic Stability and Security', 'Appointing Judges Who Respect the Constitution'],
         'T': 'keyissues_ver1',
         'Long': true
     }, {
         'Q': 'How will you vote?',
-        'A': ['Vote Absentee/Early', 'Plan to Vote Absentee/Early', 'Election Day', 'Unsure'],
+        'A': ['Vote Absentee/By Mail', 'Vote Early', 'Vote Election Day', 'Unsure'],
         'T': 'howyouvote_ver1'
     }, {
         'Q': 'What is your opinion of Cruz?',
@@ -368,16 +369,21 @@ var renderAd = function() {
             var q = 'campaignId=' + campaignId + '&rmaId=' + rmaId + '&userId=' + userId +  '&cb=' + cb + '&' + q;
         }
 
-        req.open("POST", url + '?' + q, true);
+        if (!sent) {
+          req.open("POST", url + '?' + q, true);
 
-        req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+          req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
-        req.onreadystatechange = function() {
-            if (req.readyState == 4 && req.status == 200) {
-                console.log(req.responseText);
-            }
+          req.onreadystatechange = function() {
+              if (req.readyState == 4 && req.status == 200) {
+                  console.log(req.responseText);
+              }
+          }
+          req.send(q);
+          sent = true;
         }
-        req.send(q);
+
+
         console.log(q);
     }
 

@@ -120,9 +120,9 @@ mads.prototype.tracker = function(tt, type, name, value) {
     if (typeof this.custTracker != 'undefined' && this.custTracker != '' && this.tracked.indexOf(name) == -1) {
         for (var i = 0; i < this.custTracker.length; i++) {
 
-            if (name === 'participate' && i !== 2) continue;
+            // if (name === 'participatenow_testing' && i !== 2) continue;
 
-            if (name !== 'participate' && i === 2) continue;
+            // if (name !== 'participatenow_testing' && i === 2) continue;
 
             var img = document.createElement('img');
 
@@ -138,8 +138,8 @@ mads.prototype.tracker = function(tt, type, name, value) {
             // if (this.trackedEngagementType.indexOf(tt) != '-1' || this.engagementTypeExlude.indexOf(tt) != '-1') {
             //     src = src.replace('tt={{rmatt}}', '');
             // } else {
-                src = src.replace('{{rmatt}}', tt);
-                this.trackedEngagementType.push(tt);
+            src = src.replace('{{rmatt}}', tt);
+            this.trackedEngagementType.push(tt);
             // }
 
             /* Append ty for first tracker only */
@@ -186,52 +186,92 @@ var renderAd = function() {
     var app = new mads();
 
     var qa = [{
-        'Q': 'Who is your first choice for President?',
-        'A': ['Cruz', 'Kasich', 'Trump', 'Undecided'],
-        'T': 'firstchoice_ver2'
+        'Q': 'How likely are you to vote in North Dakota\'s Republican primary for Governor?',
+        'A': ['Definitely voting', 'Probably voting', '50/50 chance I\'ll vote', 'Probably won\'t vote', 'Definitely won\'t vote'],
+        'T': 'howlikely'
     }, {
-        'Q': 'Who is your 2nd choice?',
-        'A': ['Cruz', 'Kasich', 'Trump', 'Undecided'],
-        'T': 'secondchoice_ver2'
+        'Q': 'If the Republican primary election for Governor were today, who would you vote for?',
+        'A': ['Vote Wayne Stenehjem', 'Vote Doug Burgum', 'Vote Paul Sorum', 'Undecided'],
+        'T': 'iftherepublican'
+    },
+    // {
+    //     'Q': 'Have you ever voted in a Republican primary before?',
+    //     'A': ['Yes', 'No'],
+    //     'T': 'haveyouevervoted'
+    // },
+    {
+        'Q': 'Which political party is closest to your beliefs?',
+        'A': ['Republican', 'Democratic', 'Independent/Third Party/None'],
+        'T': 'whichpoliticalparty'
     }, {
-        'Q': 'What are your key issues?',
-        'A': ['National Security and Fighting Islamic Terrorism', 'Peace Through Strength Foreign Policy', 'Reducing Government Spending', 'Economic Stability and Security', 'Appointing Judges Who Respect the Constitution'],
-        'T': 'keyissues_ver2',
-        'Long': true
+        'Q': 'Do you consider yourself a conservative, a moderate, or a liberal in your political beliefs?',
+        'A': ['Very conservative', 'Somewhat conservative', 'Moderate', 'Liberal'],
+        'T': 'doyouconsider'
     }, {
-        'Q': 'Are you voting in the upcoming primary?',
-        'A': ['Very Likely', 'Somewhat Likely', 'Unlikely', 'Unsure'],
-        'T': 'upcomingprimary_ver2'
+        'Q': 'What is your opinion of Donald Trump?',
+        'A': ['Favorable', 'Unfavorable', 'No opinion'],
+        'T': 'opinionoftrump'
     }, {
-        'Q': 'How will you vote?',
-        'A': ['Vote Absentee/By Mail', 'Vote Early', 'Vote Election Day', 'Unsure'],
-        'T': 'howyouvote_ver2'
+        'Q': 'What is your opinion of Wayne Stenehjem?',
+        'A': ['Favorable', 'Unfavorable', 'No opinion'],
+        'T': 'opinionofstenehjem'
     }, {
-        'Q': 'What is your opinion of Cruz?',
-        'A': ['Extremely Favorable', 'Somewhat Favorable', 'Neutral', 'Somewhat Unfavorable', 'Extremely Unfavorable'],
-        'T': 'opinionofcruz_ver2'
+        'Q': 'What is your opinion of Doug Burgum?',
+        'A': ['Favorable', 'Unfavorable', 'No opinion'],
+        'T': 'opinionofburgum'
     }, {
-        'Q': 'What is your opinion of Kasich?',
-        'A': ['Extremely Favorable', 'Somewhat Favorable', 'Neutral', 'Somewhat Unfavorable', 'Extremely Unfavorable'],
-        'T': 'opinionofkasich_ver2'
+        'Q': 'How has recent media coverage of Wayne Stenehjem affected your impression of him?',
+        'A': ['More favorable impression', 'Less favorable impression', 'Haven\'t seen enough to say'],
+        'T': 'mediacoverage_stenehjem'
     }, {
-        'Q': 'What is your opinion of Trump?',
-        'A': ['Extremely Favorable', 'Somewhat Favorable', 'Neutral', 'Somewhat Unfavorable', 'Extremely Unfavorable'],
-        'T': 'opinionoftrump_ver2',
-        'End': true
+        'Q': 'How has recent media coverage of Doug Burgum affected your impression of him?',
+        'A': ['More favorable impression', 'Less favorable impression', 'Haven\'t seen enough to say'],
+        'End': true,
+        'T': 'mediacoverage_burgum'
     }]
 
     var current = 0,
         pageq = [],
         results = [],
-        content = 'Make your voice heard.<br /><br /><br />Support your candidate!';
+        content = 'I\'m testing<br>a technology<br>to stop<br>telemarketing.<br><br>Will you<br>help me?';
 
-    app.contentTag.innerHTML = '<div id="main" class="abs"><div id="ad-content" class="abs"><div id="front">' + content + '<br /><br /><div id="participate">PARTICIPATE NOW</div></div></div><div id="disclaimer" class="abs">Disclaimer: This survey is paid for by Trusted Leadership PAC</div></div>';
+    app.contentTag.innerHTML = '<div id="main" class="abs"><div id="ad-content" class="abs"><div id="front">' + content + '<br /><br /><div id="participate">PARTICIPATE NOW</div></div></div><div id="disclaimer" class="abs">Disclaimer: Paid For By Victory Processing</div></div>';
 
     var main = document.getElementById('main'),
         content = document.getElementById('ad-content'),
         front = document.getElementById('front'),
         disclaimer = document.getElementById('disclaimer');
+
+    // var temp_front = front.innerHTML;
+    // front.innerHTML = '';
+
+    var showSlide = false;
+    // var slides = [];
+    //
+    // slides.push(document.createElement('div'));
+    // slides[0].innerHTML = '<div id="slide1" class="slide slide1" style="z-index: 99;">End annoying<br>phone calls.<br><br><div id="participate">Discover more</div></div>';
+    //
+    // slides.push(document.createElement('div'));
+    // slides[1].className = 'hide'
+    // slides[1].innerHTML = '<div id="slide2" class="slide slide2" style="z-index: 99;">Less than 33% of<br>North Dakota<br>residents do this.<br><br><div id="participate">Tap To Find Out</div></div>';
+    //
+    // slides.push(document.createElement('div'));
+    // slides[2].className = 'hide'
+    // slides[2].innerHTML = '<div id="slide3" class="slide slide3" style="z-index: 99;">Your voice matters.<br>Will you share it?<br><br><div id="participate">Participate Now</div></div>';
+    //
+    // for(var i in slides) {
+    //   front.appendChild(slides[i]);
+    // }
+    //
+    // var slideIndex = 0;
+    // var slideInterval = setInterval(function() {
+    //     for(var i in slides) {
+    //       slides[i].className += (slides[i].className.indexOf('hide') === -1 ? 'hide' : '');
+    //     }
+    //     slides[slideIndex].className = slides[slideIndex].className.replace('hide', '');
+    //
+    //     slideIndex += slideIndex === 2 ? -2 : 1;
+    // }, 2000);
 
     var end = document.createElement('div');
     end.className = 'thankyou hide abs';
@@ -250,6 +290,7 @@ var renderAd = function() {
     var left = document.querySelector('.left');
     var right = document.querySelector('.right');
     left.addEventListener('click', function() {
+
         if (this.style.opacity < 1) {
             e.preventDefault();
             e.stopPropagation();
@@ -291,6 +332,7 @@ var renderAd = function() {
     }, false);
 
     right.addEventListener('click', function() {
+
         if (this.style.opacity < 1) {
             e.preventDefault();
             e.stopPropagation();
@@ -333,7 +375,6 @@ var renderAd = function() {
     }, false);
 
     var getURLParameter = function(name, custom) {
-
         return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec((typeof custom !== 'undefined' ? custom : location.search)) || [, ""])[1].replace(/\+/g, '%20')) || null;
     }
 
@@ -365,23 +406,22 @@ var renderAd = function() {
             var rmaId = getURLParameter('rmaId', app.custTracker[0]);
             var userId = getURLParameter('userId', app.custTracker[0]);
             var cb = getURLParameter('id', app.custTracker[1]);
-            var q = 'campaignId=' + campaignId + '&rmaId=' + rmaId + '&userId=' + userId +  '&cb=' + cb + '&' + q;
+            var q = 'campaignId=' + campaignId + '&rmaId=' + rmaId + '&userId=' + userId + '&cb=' + cb + '&' + q;
         }
 
         if (!sent) {
-          req.open("POST", url + '?' + q, true);
+            req.open("POST", url + '?' + q, true);
 
-          req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
-          req.onreadystatechange = function() {
-              if (req.readyState == 4 && req.status == 200) {
-                  console.log(req.responseText);
-              }
-          }
-          req.send(q);
-          sent = true;
+            req.onreadystatechange = function() {
+                if (req.readyState == 4 && req.status == 200) {
+                    console.log(req.responseText);
+                }
+            }
+            req.send(q);
+            sent = true;
         }
-        console.log(q);
     }
 
     for (var i in qa) {
@@ -476,7 +516,7 @@ var renderAd = function() {
     var onceMain = true;
 
     main.addEventListener('click', function() {
-        if (onceMain) {
+        if (onceMain && !showSlide) {
             front.style.display = 'none';
             disclaimer.style.opacity = '1';
             pageq[0].className = 'questionaire';
@@ -488,7 +528,14 @@ var renderAd = function() {
                 arrows.style.opacity = 1;
             }, 1)
             onceMain = false;
-            app.tracker('E', 'participate');
+            app.tracker('E', 'participatenow_testing');
+        }
+
+        if (showSlide) {
+            showSlide = false;
+            main.style.background = 'url(' + app.path + 'img/bg.jpg' + ')';
+            clearInterval(slideInterval);
+            front.innerHTML = temp_front;
         }
     }, false);
 
